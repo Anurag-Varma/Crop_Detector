@@ -1,0 +1,314 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Crop Detector</title>
+
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <link href="{% static '/css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <style>
+        #id2 {
+            color: #2e568a;
+            font-weight: bolder;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+
+        #id3 {
+            color: #7400b8;
+            font-weight: bolder;
+        }
+
+
+        #id4,
+        #id5 {
+            color: #ef3054;
+            font-weight: bolder;
+        }
+
+        #id6,
+        #id7 {
+            color: #3c916b;
+            font-weight: bolder;
+        }
+
+        #pdisease {
+            color: #B565A7;
+            font-weight: bolder;
+        }
+
+    </style>
+
+</head>
+
+<body id="page-top">
+
+    <div id="wrapper">
+
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar"
+            style="background-color: slategray;">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+                <div class="sidebar-brand-text mx-5" style="font-size: 6mm;  font-weight: bolder;">Crop Detector
+                </div>
+            </a>
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item">
+                <a class="nav-link" href="">
+                    <i class="fas fa-fw fa-tachometer-alt" style="font-size: 4mm;"></i>
+                    <span style="font-size: 4mm; font-weight: bolder;">Dashboard</span>
+                </a>
+            </li>
+
+            <hr class="sidebar-divider">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'crop_detector:download' %}">
+                    <i class="fas fa-fw fa-folder" style="font-size: 4mm;"></i>
+                    <span style="font-size: 4mm; font-weight: bolder;">Download Data</span></a>
+            </li>
+
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <div id="content">
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+
+
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 "
+                                    style="font-size: 6mm; font-weight: bolder;">Hello
+                                    {{request.user}}</span>
+                                <img class="img-profile rounded-circle" src="{% static 'img/undraw_profile.svg' %}">
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <!-- <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a> 
+                                <div class="dropdown-divider"></div>-->
+
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+                <div class="container-fluid">
+
+                    <form action="." method="POST" enctype="multipart/form-data" id="f">
+                        {% csrf_token %}
+
+                        <div id="f">
+                            {{form.as_p}}
+                        </div>
+
+
+                        <br>
+
+
+                        <button type="button" class="btn btn-info" onclick="getLocation()">Get Location</button>
+
+                        <br>
+                        <br>
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-success px-5">Upload</button>
+
+                        </div>
+                    </form>
+                    <br>
+                    <br>
+
+
+                    <div class="d-flex flex-column bd-highlight mb-3">
+
+                        {%for ximage in img%}
+                        <br>
+                        <span class="border border-2 border-info"></span>
+                        <br>
+                        {%if ximage.images%}
+                        <div>
+                            <div class="row d-flex justify-content-around">
+                                <div class="col-md-4" id="id1"><img src="{{ximage.images.url}}" class="imgs" alt=""
+                                        width="200px" height="200px"></div>
+                                <div class="col-md-4">
+                                    <h2 class="text-capitalize" id="id2">{{ximage.image_name}}</h2>
+                                    <p><span class="fw-bold" id="id3">Date Uploaded: </span>{{ximage.pub_date}}</p>
+                                    <p id="pname" class="text-capitalize"><span class="fw-bold" id="id4">Plant
+                                            Name:</span>
+                                        {{ximage.plant_name}}</p>
+                                    <p id="phealth" class="text-capitalize"><span class="fw-bold" id="id5">Plant
+                                            Health:</span>
+                                        {{ximage.plant_health}}
+                                    </p>
+
+                                    {%if ximage.plant_health == "disease" %}
+                                    <div id="pdisease">Possible Diseases:</div>
+                                    {%for i1,i2 in diseasedata.items%}
+                                    {%if i1 == ximage.plant_name %}
+
+                                    {%for j1,j2 in i2.items%}
+                                    <a href="{{j2}}">{{j1}}</a>
+                                    <br>
+                                    {%endfor%}
+                                    {%endif%}
+                                    {%endfor%}
+                                    <br>
+                                    {%endif%}
+
+
+
+                                    <p class=" mb-0"><span class="fw-bold" id="id6">Longitude :</span>
+                                        {{ximage.longitude}}</p>
+                                    <p><span class="fw-bold" id="id7">Latitude:</span> {{ximage.latitude}}</p>
+                                </div>
+                                <div class=col-md-4>
+                                    <button class="btn btn-primary"
+                                        onclick="window.location.href='https://www.latlong.net/c/?lat={{ximage.latitude}}&long={{ximage.longitude}}'">Open
+                                        Maps Location</button>
+
+                                    <br>
+                                    <br>
+                                    <form method="post" action="{% url 'crop_detector:delete_image' ximage.id %}">
+                                        {% csrf_token %}
+                                        <button
+                                            onclick="return confirm('Are you sure, to delete the selected Image along with data?')"
+                                            class="btn btn-danger" type="submit">Delete Image</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        {%endif%}
+                        {% endfor %}
+
+                    </div>
+                    <br>
+
+
+                </div>
+
+
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Are you sure you want to "Logout" .</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="{%url 'crop_detector:logout'%}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var x = document.getElementById("longitude");
+        var y = document.getElementById("latitude");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                x.value = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        function showPosition(position) {
+            x.value = position.coords.longitude
+            y.value = position.coords.latitude
+        }
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+</body>
+
+</html>

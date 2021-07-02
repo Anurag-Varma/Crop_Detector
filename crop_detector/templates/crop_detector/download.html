@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download</title>
+
+
+    <style>
+        #id2 {
+            color: #2e568a;
+            font-weight: bolder;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+
+        #id3 {
+            color: #7400b8;
+        }
+
+
+        #id4,
+        #id5 {
+            color: #ef3054;
+        }
+
+        #id6,
+        #id7 {
+            color: #3c916b;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div>
+
+        <hr>
+        {%for ximage in img%}
+
+        {%if ximage.images%}
+
+        <div style="display: flex; justify-content: space-evenly;">
+            <div id="id1">
+                <img src="{{ximage.images.path}}" alt="" width="200px" height="200px">
+            </div>
+            <div>
+                <h2 id="id2">{{ximage.image_name}}</h2>
+                <p><span id=" id3">Date Uploaded: </span>{{ximage.pub_date}}</p>
+                <p id="pname"><span id="id4">Plant Name:</span>
+                    {{ximage.plant_name}}</p>
+                <p id="phealth"><span id="id5">Plant Health:</span>
+                    {{ximage.plant_health}}
+                </p>
+                <p><span id="id6">Longitude :</span> {{ximage.longitude}}</p>
+                <p><span id="id7">Latitude:</span> {{ximage.latitude}}</p>
+            </div>
+
+        </div>
+
+        <hr>
+
+        {%endif%}
+        {% endfor %}
+
+    </div>
+</body>
+
+</html>
